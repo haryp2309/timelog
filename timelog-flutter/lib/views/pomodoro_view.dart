@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:timelog/api/socket_io.dart';
 import 'package:timelog/api/timer_subscriber.dart';
 import 'package:timelog/helpers/duration_helpers.dart';
 import 'package:timelog/models/timer.dart';
+import 'package:timelog/services/app_service.dart';
 
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key});
@@ -15,17 +15,18 @@ class _PomodoroViewState extends State<PomodoroView> {
   var currentDuration = const Duration();
   final timelogTimer = TimerSubscriber(
     timelogTimer: TimelogTimer(),
-    socketIo: SocketIO.main,
+    socketIo: AppService.main.socketTmp,
   );
   List<void Function()> onDisposeFunctions = [];
 
   @override
   void initState() {
-    timelogTimer.listen((duration) {
+    final unsubscriber = timelogTimer.listen((duration) {
       setState(() {
         currentDuration = duration;
       });
     });
+    onDisposeFunctions.add(unsubscriber);
     super.initState();
   }
 

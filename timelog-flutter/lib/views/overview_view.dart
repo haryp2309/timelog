@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timelog/components/time_entry_card.dart';
-import 'package:timelog/models/app.dart';
 import 'package:timelog/models/timer_entry.dart';
+import 'package:timelog/services/app_service.dart';
 
 class OverviewView extends StatefulWidget {
   const OverviewView({super.key});
@@ -15,7 +15,8 @@ class _OverviewViewState extends State<OverviewView> {
 
   @override
   initState() {
-    timerEntryListenerUnsubscriber = App.main.listenTimerEntry((v) {
+    timerEntryListenerUnsubscriber =
+        AppService.main.timerEntryService.listenTimerEntry((v) {
       setState(() {
         timeEntries = v;
       });

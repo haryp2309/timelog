@@ -1,11 +1,9 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:timelog/api/api.dart';
 import 'package:timelog/api/default_user.dart';
-import 'package:timelog/models/app.dart';
+import 'package:timelog/services/app_service.dart';
 
 class SocketIO {
-  static SocketIO main = SocketIO();
-
   late final IO.Socket _socket;
   void Function()? onStartTimer;
   void Function()? onStopTimer;
@@ -43,7 +41,7 @@ class SocketIO {
     final List<String>? timerEntryIds =
         uncheckedTimerEntryIds?.map((element) => element as String).toList();
 
-    Api().loadTimeEntries(App.main, timerEntryIds: timerEntryIds);
+    Api().loadTimeEntries(AppService.main, timerEntryIds: timerEntryIds);
   }
 
   void emitResetTimer() {

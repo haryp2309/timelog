@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:timelog/api/default_user.dart';
 import 'package:timelog/extensions/hex_color.dart';
-import 'package:timelog/models/app.dart';
 import 'package:timelog/models/client.dart';
 import 'package:timelog/models/project.dart';
 import 'package:timelog/models/timer_entry.dart';
+import 'package:timelog/services/app_service.dart';
 
 class Api {
   String hostname = "localhost:3000";
@@ -31,25 +31,25 @@ class Api {
   }
 
   Future<Client> loadClient({
-    required App app,
+    required AppService app,
     required String clientId,
   }) async {
     final response = await get("/api/client/get/$clientId");
     final Map<String, dynamic> body = jsonDecode(response.body);
-    return app.addOrUpdateClient(
+    return app.clientService.addOrUpdateClient(
       clientId: body["id"],
       name: body["name"],
     );
   }
 
   Future<Project> loadProject({
-    required App app,
+    required AppService app,
     required String projectId,
   }) async {
     final response = await get("/api/project/get/$projectId");
     final Map<String, dynamic> body = jsonDecode(response.body);
     final clientId = body["clientId"];
-    return app.addOrUpdateProject(
+    return app.projectService.addOrUpdateProject(
       projectId: body["id"],
       clientId: clientId,
       color: HexColor.fromHex(body["color"]),
@@ -59,7 +59,7 @@ class Api {
   }
 
   Future<List<TimerEntry>> loadTimeEntries(
-    App app, {
+    AppService app, {
     List<String>? timerEntryIds,
   }) async {
     final Map<String, dynamic> queryParams = {};
@@ -72,7 +72,7 @@ class Api {
     );
     final List<dynamic> body = jsonDecode(value.body);
     final timerEntriesFutures = body.map((obj) {
-      return app.addOrUpdateTimerEntry(
+      return app.timerEntryService.addOrUpdateTimerEntry(
         timerEntryId: obj["id"],
         projectId: obj["project"]["id"],
         startTime: DateTime.parse(obj["startTime"]),
