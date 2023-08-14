@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart';
-import 'package:timelog/api/api.dart';
-import 'package:timelog/api/socket_io.dart';
 import 'package:timelog/helpers/listener_manager.dart';
 import 'package:timelog/models/client.dart';
 import 'package:timelog/models/project.dart';
@@ -12,24 +9,11 @@ class App {
 
   final clientListener = ListenerManager<List<Client>>();
   final projectListener = ListenerManager<List<Project>>();
-  final timerEntryListener = ListenerManager<List<TimerEntry>>();
+  final _timerEntryListener = ListenerManager<List<TimerEntry>>();
 
   List<Client> clients = [];
   List<Project> projects = [];
   List<TimerEntry> timerEntries = [];
-
-  App() {
-    SocketIO.socket.onConnect((data) {
-      SocketIO.socket.on("update-timerentries", (data) {
-        final List<dynamic>? uncheckedTimerEntryIds = data["timerEntryIds"];
-        final List<String>? timerEntryIds = uncheckedTimerEntryIds
-            ?.map((element) => element as String)
-            .toList();
-
-        Api().loadTimeEntries(this, timerEntryIds: timerEntryIds);
-      });
-    });
-  }
 
   Client addOrUpdateClient({required String clientId, required String name}) {
     final existingClient =
@@ -120,8 +104,14 @@ class App {
       timerEntry = existingTimerEntry;
     }
 
-    timerEntryListener.sendUpdates(timerEntries);
+    _timerEntryListener.sendUpdates(timerEntries);
 
     return timerEntry;
+  }
+
+  void Function() listenTimerEntry(void Function(List<TimerEntry>) callback) {
+    final unsubscriber = _timerEntryListener.listen(callback);
+    callback(timerEntries);
+    return unsubscriber;
   }
 }

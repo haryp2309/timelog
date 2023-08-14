@@ -1,40 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:timelog/api/socket_io.dart';
 import 'package:timelog/api/timer_subscriber.dart';
 import 'package:timelog/helpers/duration_helpers.dart';
 import 'package:timelog/models/timer.dart';
 
-class PomodoroView extends HookWidget {
+class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key});
 
   @override
+  State<PomodoroView> createState() => _PomodoroViewState();
+}
+
+class _PomodoroViewState extends State<PomodoroView> {
+  var currentDuration = const Duration();
+  final timelogTimer = TimerSubscriber(
+    timelogTimer: TimelogTimer(),
+    socketIo: SocketIO.main,
+  );
+  List<void Function()> onDisposeFunctions = [];
+
+  @override
+  void initState() {
+    timelogTimer.listen((duration) {
+      setState(() {
+        currentDuration = duration;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (var onDispose in onDisposeFunctions) {
+      onDispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final currentDuration = useState(const Duration());
-    final timelogTimer =
-        useState(TimerSubscriber(timelogTimer: TimelogTimer()));
-
-    useEffect(
-      () {
-        timelogTimer.value.listen((duration) {
-          currentDuration.value = duration;
-        });
-        return null;
-      },
-      [timelogTimer],
-    );
-
-    final hasStarted = timelogTimer.value.hasStarted();
+    final hasStarted = timelogTimer.hasStarted();
 
     void handleStart() {
-      timelogTimer.value.start();
+      timelogTimer.start();
     }
 
     void handleStop() {
-      timelogTimer.value.stop();
+      timelogTimer.stop();
     }
 
     void handleReset() {
-      timelogTimer.value.reset();
+      timelogTimer.reset();
     }
 
     return Container(
@@ -46,7 +62,7 @@ class PomodoroView extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                formatDuration(currentDuration.value),
+                formatDuration(currentDuration),
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(

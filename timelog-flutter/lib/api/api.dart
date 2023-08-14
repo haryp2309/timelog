@@ -67,7 +67,7 @@ class Api {
       queryParams.addAll({"timerEntryIds": timerEntryIds});
     }
     final value = await get(
-      "/api/user/timeentries",
+      "/api/timerentry/batch/get",
       queryParams: queryParams,
     );
     final List<dynamic> body = jsonDecode(value.body);

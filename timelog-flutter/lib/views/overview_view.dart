@@ -11,12 +11,22 @@ class OverviewView extends StatefulWidget {
 }
 
 class _OverviewViewState extends State<OverviewView> {
-  _OverviewViewState() {
-    App.main.timerEntryListener.listen((v) {
+  late void Function() timerEntryListenerUnsubscriber;
+
+  @override
+  initState() {
+    timerEntryListenerUnsubscriber = App.main.listenTimerEntry((v) {
       setState(() {
         timeEntries = v;
       });
     });
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    timerEntryListenerUnsubscriber();
+    super.dispose();
   }
 
   List<TimerEntry> timeEntries = [];

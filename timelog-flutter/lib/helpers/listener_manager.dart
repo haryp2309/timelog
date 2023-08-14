@@ -7,7 +7,7 @@ class ListenerManager<T> {
     }
   }
 
-  void Function() listen(Function(T) callback) {
+  void Function() listen(void Function(T) callback) {
     _callbacks.add(callback);
     return () {
       _callbacks.remove(callback);

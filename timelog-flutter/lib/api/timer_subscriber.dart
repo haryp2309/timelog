@@ -2,18 +2,13 @@ import 'package:timelog/api/socket_io.dart';
 import 'package:timelog/models/timer.dart';
 
 class TimerSubscriber implements TimelogTimer {
-  TimerSubscriber({required TimelogTimer timelogTimer})
-      : _timelogTimer = timelogTimer {
-    /* SocketIO.socket.onConnect((data) {
-      SocketIO.socket.onAny((event, data) {
-        if (event == "error") {
-          print("SOCKET_ERROR: $data");
-        }
-      });
-      SocketIO.socket.on('startTimer', (data) => _timelogTimer.start());
-      SocketIO.socket.on('stopTimer', (data) => _timelogTimer.stop());
-      SocketIO.socket.on('resetTimer', (data) => _timelogTimer.reset());
-    }); */
+  TimerSubscriber({
+    required TimelogTimer timelogTimer,
+    required SocketIO socketIo,
+  }) : _timelogTimer = timelogTimer {
+    socketIo.onStartTimer = () => _timelogTimer.start();
+    socketIo.onStopTimer = () => _timelogTimer.stop();
+    socketIo.onResetTimer = () => _timelogTimer.reset();
   }
 
   final TimelogTimer _timelogTimer;
@@ -30,16 +25,16 @@ class TimerSubscriber implements TimelogTimer {
 
   @override
   void reset() {
-    SocketIO.socket.emit("emit:resetTimer");
+    SocketIO.main.emitResetTimer();
   }
 
   @override
   void start() {
-    SocketIO.socket.emit("emit:startTimer");
+    SocketIO.main.emitStartTimer();
   }
 
   @override
   void stop() {
-    SocketIO.socket.emit("emit:stopTimer");
+    SocketIO.main.emitStopTimer();
   }
 }

@@ -1,21 +1,17 @@
 import 'dart:async';
 
+import 'package:timelog/helpers/listener_manager.dart';
+
 class TimelogTimer {
   DateTime? _startedTime;
-  final List<Function(Duration)> _callbacks = [];
+  final _listenerManager = ListenerManager<Duration>();
   Timer? _internalTimer;
 
   void _sendCurrentUpdates() {
     DateTime? currentStartedTime = _startedTime;
     if (currentStartedTime != null) {
       Duration currentDuration = DateTime.now().difference(currentStartedTime);
-      _sendUpdates(currentDuration);
-    }
-  }
-
-  void _sendUpdates(Duration duration) {
-    for (var callback in _callbacks) {
-      callback(duration);
+      _listenerManager.sendUpdates(currentDuration);
     }
   }
 
@@ -36,7 +32,7 @@ class TimelogTimer {
   }
 
   void reset() {
-    _sendUpdates(Duration.zero);
+    _listenerManager.sendUpdates(Duration.zero);
   }
 
   bool hasStarted() {
@@ -44,9 +40,6 @@ class TimelogTimer {
   }
 
   Function() listen(Function(Duration) callback) {
-    _callbacks.add(callback);
-    return () {
-      _callbacks.remove(callback);
-    };
+    return _listenerManager.listen(callback);
   }
 }
