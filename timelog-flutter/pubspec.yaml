@@ -42,6 +42,7 @@ dependencies:
   path:
   socket_io_client: ^2.0.3
   http: ^1.1.0
+  timeago: ^3.5.0
 
 
 dev_dependencies:

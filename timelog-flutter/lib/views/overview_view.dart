@@ -1,4 +1,6 @@
+import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:timelog/components/time_entry_card.dart';
 import 'package:timelog/models/timer_entry.dart';
 import 'package:timelog/services/app_service.dart';
@@ -11,26 +13,48 @@ class OverviewView extends StatefulWidget {
 }
 
 class _OverviewViewState extends State<OverviewView> {
-  late void Function() timerEntryListenerUnsubscriber;
+  late void Function() _timerEntryListenerUnsubscriber;
+  List<TimerEntry> _timerEntries = [];
 
   @override
   initState() {
-    timerEntryListenerUnsubscriber =
+    _timerEntryListenerUnsubscriber =
         AppService.main.timerEntryService.listenTimerEntry((v) {
       setState(() {
-        timeEntries = v;
+        _timerEntries = v;
       });
     });
+
     super.initState();
   }
 
   @override
   dispose() {
-    timerEntryListenerUnsubscriber();
+    _timerEntryListenerUnsubscriber();
     super.dispose();
   }
 
-  List<TimerEntry> timeEntries = [];
+  Map<String, List<TimerEntry>> get _groupedTimerEntries {
+    final groupedTimerEntries = groupBy(
+      _timerEntries,
+      (timerEntry) {
+        final startDate = DateTime.utc(
+          timerEntry.startTime.year,
+          timerEntry.startTime.month,
+          timerEntry.startTime.day,
+        );
+        return timeago.format(startDate);
+      },
+    ).map((key, value) {
+      return MapEntry(key, value..sort());
+    });
+
+    return groupedTimerEntries;
+  }
+
+  List<String> get _localizedRelativeDates {
+    return _groupedTimerEntries.keys.toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,28 +70,40 @@ class _OverviewViewState extends State<OverviewView> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Yesterday",
-                    style: Theme.of(context).textTheme.titleMedium,
+          ..._localizedRelativeDates.map(
+            (localizedRelativeDate) {
+              final timerEntries = _groupedTimerEntries[localizedRelativeDate];
+              if (timerEntries == null) {
+                return const Column();
+              }
+              return Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            localizedRelativeDate,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        Text(
+                          "1:17:21",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Text(
-                  "1:17:21",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ),
-          ...timeEntries.map(
-            (timeEntry) => TimeEntryCard(
-              timerEntry: timeEntry,
-            ),
-          ),
+                  ...timerEntries.map(
+                    (timeEntry) => TimeEntryCard(
+                      timerEntry: timeEntry,
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
         ],
       ),
     );

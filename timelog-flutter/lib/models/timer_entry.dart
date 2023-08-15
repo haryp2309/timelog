@@ -1,6 +1,6 @@
 import 'package:timelog/models/project.dart';
 
-class TimerEntry {
+class TimerEntry implements Comparable<TimerEntry> {
   TimerEntry({
     required this.id,
     required this.description,
@@ -17,5 +17,10 @@ class TimerEntry {
 
   Duration getDuration() {
     return (endTime ?? DateTime.now()).difference(startTime);
+  }
+
+  @override
+  int compareTo(TimerEntry other) {
+    return startTime.compareTo(other.startTime);
   }
 }

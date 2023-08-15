@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import 'package:timelog/helpers/listener_manager.dart';
 import 'package:timelog/models/project.dart';
 import 'package:timelog/models/timer_entry.dart';
@@ -47,14 +48,6 @@ class TimerEntryService {
   }
 
   void Function() listenTimerEntry(void Function(List<TimerEntry>) callback) {
-    final unsubscriber = _timerEntryListener.listen(callback);
-    callback(_timerEntries);
-    return unsubscriber;
-  }
-
-  void Function() listenTimerEntryWithGroups(
-    void Function(List<TimerEntry>) callback,
-  ) {
     final unsubscriber = _timerEntryListener.listen(callback);
     callback(_timerEntries);
     return unsubscriber;
