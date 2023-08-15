@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timelog/pages/phone_page.dart';
+import 'package:timelog/pages/home/home_page.dart';
 import 'package:timelog/themes/color_provider.dart';
 import 'package:timelog/themes/default_theme.dart';
 
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: DefaultThemeBuilder(
         colorProvider: ColorProvider.light,
       ).build(),
-      home: const MyPhonePage(title: 'Timer'),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

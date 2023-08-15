@@ -59,17 +59,9 @@ class _OverviewViewState extends State<OverviewView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ListView(
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: const EdgeInsets.all(10),
-            child: Text(
-              "Your activity",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
           ..._localizedRelativeDates.map(
             (localizedRelativeDate) {
               final timerEntries = _groupedTimerEntries[localizedRelativeDate];
