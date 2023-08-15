@@ -5,9 +5,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const globalPrefix = '/api';
+  app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()
     .setTitle('Timelog')
     .setVersion('1.0')
+    .setBasePath(globalPrefix)
     .addBearerAuth(
       {
         description: `Access Token`,
@@ -33,6 +36,7 @@ async function bootstrap() {
       persistAuthorization: true,
     },
   });
+
   await app.listen(3000);
 }
 bootstrap();

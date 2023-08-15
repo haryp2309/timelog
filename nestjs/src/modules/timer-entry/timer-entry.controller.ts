@@ -7,8 +7,9 @@ import {
   Get,
   Param,
   Post,
+  Query,
 } from '@nestjs/common';
-import { ApiBasicAuth, ApiBody } from '@nestjs/swagger';
+import { ApiBasicAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { DateTime } from 'luxon';
 
 @ApiBasicAuth('access-user')
@@ -80,5 +81,36 @@ export class TimerEntryController {
       throw new BadRequestException();
     }
     return this.timerEntryService.getTimerEntry(timerEntryId, email);
+  }
+
+  @ApiQuery({
+    name: 'timerEntryIds',
+    type: 'string',
+    isArray: true,
+    required: false,
+    example: [
+      '1a466015-d0be-4605-9382-e982586a31ad',
+      '41339610-7a1f-4525-a542-a043701b6938',
+    ],
+  })
+  @Get('/batch/get')
+  async getTimerEntriesForUser(
+    @AuthUser() email?: string,
+    @Query('timerEntryIds') timerEntryIds?: string | string[],
+  ) {
+    if (!email) {
+      throw new BadRequestException();
+    }
+
+    if (timerEntryIds) {
+      const checkedTimerEntryIds =
+        typeof timerEntryIds === 'string' ? [timerEntryIds] : timerEntryIds;
+      return await this.timerEntryService.getMultipleTimerEntries(
+        email,
+        checkedTimerEntryIds,
+      );
+    }
+
+    return await this.timerEntryService.getAllTimerEntriesForUser(email);
   }
 }

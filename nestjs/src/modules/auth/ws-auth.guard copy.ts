@@ -4,7 +4,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { IncomingMessage } from 'http';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class WsAuthGuard implements CanActivate {
   constructor(private jwtService: CustomJwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

@@ -60,4 +60,69 @@ export class TimerEntryService {
 
     return timerEntry;
   }
+
+  async getAllTimerEntriesForUser(email: string) {
+    return await this.prisma.timerEntry.findMany({
+      where: {
+        project: {
+          client: {
+            userEmail: email,
+          },
+        },
+      },
+      select: {
+        id: true,
+        description: true,
+        endTime: true,
+        startTime: true,
+        project: {
+          select: {
+            id: true,
+            client: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        startTime: 'desc',
+      },
+    });
+  }
+
+  async getMultipleTimerEntries(email: string, timerEntryIds: string[]) {
+    return await this.prisma.timerEntry.findMany({
+      where: {
+        project: {
+          client: {
+            userEmail: email,
+          },
+        },
+        id: {
+          in: timerEntryIds,
+        },
+      },
+      select: {
+        id: true,
+        description: true,
+        endTime: true,
+        startTime: true,
+        project: {
+          select: {
+            id: true,
+            client: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        startTime: 'desc',
+      },
+    });
+  }
 }
