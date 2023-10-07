@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+// Some comment
+
 import 'package:http/http.dart' as http;
 import 'package:timelog/api/default_user.dart';
 import 'package:timelog/extensions/hex_color.dart';
