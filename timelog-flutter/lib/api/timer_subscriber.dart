@@ -9,6 +9,7 @@ class TimerSubscriber implements TimelogTimer {
         if (event == "error") {
           print("SOCKET_ERROR: $data");
         }
+      heyyyy
       });
       SocketIO.socket.on('startTimer', (data) => _timelogTimer.start());
       SocketIO.socket.on('stopTimer', (data) => _timelogTimer.stop());
