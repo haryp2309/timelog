@@ -4,6 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:timelog/components/time_entry_card.dart';
 import 'package:timelog/models/timer_entry.dart';
 import 'package:timelog/services/app_service.dart';
+import 'package:timelog/themes/theme_extension.dart';
 
 class OverviewView extends StatefulWidget {
   const OverviewView({super.key});
@@ -59,7 +60,7 @@ class _OverviewViewState extends State<OverviewView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: CustomThemeExtension.getValues(context).pageMargin,
       child: ListView(
         children: [
           ..._localizedRelativeDates.map(

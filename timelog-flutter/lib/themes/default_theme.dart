@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timelog/themes/color_provider.dart';
+import 'package:timelog/themes/theme_extension.dart';
 
 class DefaultThemeBuilder {
   const DefaultThemeBuilder({required this.colorProvider});
@@ -19,6 +20,11 @@ class DefaultThemeBuilder {
         backgroundColor: colorProvider.backgroundColor,
       ),
       useMaterial3: true,
+      extensions: const [
+        CustomThemeExtension(
+          pageMargin: EdgeInsets.only(left: 10, right: 10),
+        ),
+      ],
     );
   }
 }

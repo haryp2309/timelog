@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timelog/pages/home/home_navigation_view.dart';
 import 'package:timelog/pages/home/main_navigation_bar.dart';
+import 'package:timelog/pages/new_timer_entry/new_timer_entry_page.dart';
 import 'package:timelog/views/overview_view.dart';
 import 'package:timelog/views/pomodoro_view.dart';
 
@@ -14,19 +15,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State {
   HomeNavigationView currentView = HomeNavigationView.overview;
 
-  void handleAdd() {}
-  void handleSettings() {}
-
   ({String title, List<IconButton> actions, Widget body}) getCurrentConfig(
     HomeNavigationView currentView,
   ) {
     switch (currentView) {
       case HomeNavigationView.overview:
+        void handleNewTimerEntry() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewTimerEntryPage(),
+            ),
+          );
+        }
+        void handleSettings() {}
         return (
           title: "Your activities",
           actions: [
             IconButton(
-              onPressed: handleAdd,
+              onPressed: handleNewTimerEntry,
               icon: const Icon(Icons.add_rounded),
             ),
             IconButton(
@@ -39,7 +46,11 @@ class _HomePageState extends State {
       case HomeNavigationView.timer:
         return (title: "Pomodoro", actions: [], body: const PomodoroView());
       case HomeNavigationView.settings:
-        return (title: "Overview", actions: [], body: const OverviewView());
+        return (
+          title: "Overview",
+          actions: [],
+          body: const Text("Some setting")
+        );
     }
   }
 
