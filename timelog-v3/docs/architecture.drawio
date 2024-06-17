@@ -1,0 +1,15 @@
+<mxfile host="app.diagrams.net" modified="2024-02-18T11:40:55.881Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0" etag="AAC8rlTZDYsdvm7t2iOg" version="23.1.5" type="device">
+  <diagram name="Page-1" id="4lDk51xbj5pzVns9jrAr">
+    <mxGraphModel dx="1083" dy="670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <object label="" title="{background: red}" id="0">
+          <mxCell />
+        </object>
+        <mxCell id="1" parent="0" />
+        <mxCell id="aTRTbKg03fQBY51J9LLK-1" value="&lt;p&gt;&lt;b&gt;Sign In&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Signs into the user and connect the client to the user&#39;s private room.&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;autosize=1;spacing=8;verticalAlign=top;resizable=1;resizeWidth=1;resizeHeight=0;fixedWidth=1;spacingRight=12;spacingLeft=12;strokeColor=#A8A8A8;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="250" y="60" width="160" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

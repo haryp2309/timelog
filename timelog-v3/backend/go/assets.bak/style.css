@@ -1,0 +1,32 @@
+body {
+    --card-border-color: #E1E2E6
+}
+
+header {
+    height: fit-content;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        --card-border-color: #4d4d4d
+    }
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 8px;
+    border-color: var(--card-border-color);
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    padding: 32px;
+}
+
+#timer {
+    font-weight: 700;
+    font-size: 2.25em;
+    line-height: 2.5em;
+}

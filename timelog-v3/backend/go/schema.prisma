@@ -1,0 +1,28 @@
+datasource db {
+    // could be postgresql or mysql
+    provider = "sqlite"
+    url      = "file:dev.db"
+}
+
+generator db {
+    provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+model AuthTokens {
+    token  String @id @default(cuid())
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+}
+
+model User {
+    id         String       @id @default(cuid())
+    name       String
+    AuthTokens AuthTokens[]
+}
+
+model Stopwatch {
+    id        String   @id @default(cuid())
+    startedAt DateTime @default(now())
+    endedAt   DateTime @updatedAt
+    label     String
+}

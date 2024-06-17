@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Timelog</title>
+    <link rel="stylesheet" href="src/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a class="logo">
+          <icon-timer class="icon"></icon-timer>
+          Timelog
+        </a>
+        <a class="splitter">|</a>
+        <a class="selected">Overview</a>
+        <a>New Timer</a>
+        <div class="expander"></div>
+        <c-button label="Sign in"></c-button>
+      </nav>
+    </header>
+    <main>
+      <h1>Current timers</h1>
+      <div class="timers-container">
+        <timer-card
+          timerId="room/user1/main_timer"
+          shortTimerId="main_timer"
+        ></timer-card>
+        <timer-card
+          timerId="room/user1/timer_2"
+          shortTimerId="timer_2"
+        ></timer-card>
+        <timer-card
+          timerId="room/user1/timer_3"
+          shortTimerId="timer_3"
+        ></timer-card>
+      </div>
+      <h1>History</h1>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Duration</th>
+        </tr>
+        <tr>
+          <td>School work</td>
+          <td>Yesterday</td>
+          <td>3 hours and 55 minutes</td>
+        </tr>
+        <tr>
+          <td>School work</td>
+          <td>One week ago</td>
+          <td>2 hours and 6 minutes</td>
+        </tr>
+        <tr>
+          <td>School work</td>
+          <td>Last month</td>
+          <td>9 hours and 53 minutes</td>
+        </tr>
+      </table>
+    </main>
+    <script type="module" src="src/main.ts"></script>
+  </body>
+</html>
