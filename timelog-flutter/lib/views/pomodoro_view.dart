@@ -13,10 +13,7 @@ class PomodoroView extends StatefulWidget {
 
 class _PomodoroViewState extends State<PomodoroView> {
   var currentDuration = const Duration();
-  final timelogTimer = TimerSubscriber(
-    timelogTimer: TimelogTimer(),
-    socketIo: AppService.main.socketTmp,
-  );
+  final timelogTimer = TimelogTimer();
   List<void Function()> onDisposeFunctions = [];
 
   @override
@@ -56,45 +53,86 @@ class _PomodoroViewState extends State<PomodoroView> {
 
     return Container(
       margin: const EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                formatDuration(currentDuration),
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Row(
-                children: hasStarted
-                    ? [
-                        ElevatedButton(
-                          onPressed: handleStop,
-                          child: const Text("Stop"),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: handleStart,
-                          child: const Text("Lap"),
-                        )
-                      ]
-                    : [
-                        ElevatedButton(
-                          onPressed: handleStart,
-                          child: const Text("Start"),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: handleReset,
-                          child: const Text("Reset"),
-                        )
-                      ],
-              ),
-            ],
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      formatDuration(currentDuration),
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      children: hasStarted
+                          ? [
+                              ElevatedButton(
+                                onPressed: handleStop,
+                                child: const Text("Stop"),
+                              ),
+                              const SizedBox(width: 10),
+                              ElevatedButton(
+                                onPressed: handleStart,
+                                child: const Text("Lap"),
+                              ),
+                            ]
+                          : [
+                              ElevatedButton(
+                                onPressed: handleStart,
+                                child: const Text("Start"),
+                              ),
+                              const SizedBox(width: 10),
+                              ElevatedButton(
+                                onPressed: handleReset,
+                                child: const Text("Reset"),
+                              ),
+                            ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Description',
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          DropdownMenu<String>(
+            initialSelection: AppService.main.projectService.iterable.first.id,
+            expandedInsets: EdgeInsets.zero,
+            leadingIcon: const Icon(
+              Icons.circle,
+              size: 10,
+              color: Colors.amber,
+            ),
+            dropdownMenuEntries: AppService.main.projectService.iterable
+                .map(
+                  (e) => DropdownMenuEntry(
+                    value: e.id,
+                    label: e.name,
+                    leadingIcon: Icon(
+                      Icons.circle,
+                      size: 10,
+                      color: e.color,
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+          const SizedBox(
+            height: 40,
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import 'package:timelog/helpers/listener_manager.dart';
 import 'package:timelog/models/project.dart';
 import 'package:timelog/models/timer_entry.dart';
+import 'package:timelog/services/app_service.dart';
 import 'package:timelog/services/project_service.dart';
 
 class TimerEntryService {
@@ -11,14 +12,13 @@ class TimerEntryService {
 
   TimerEntryService(this._projectService);
 
-  Future<TimerEntry> addOrUpdateTimerEntry({
+  TimerEntry addOrUpdateTimerEntry({
     required String timerEntryId,
     required String projectId,
     required DateTime startTime,
     required String? description,
     required DateTime? endTime,
-    required Future<Project> Function() onMissingProject,
-  }) async {
+  }) {
     final existingTimerEntry = _timerEntries
         .where((element) => element.id == timerEntryId)
         .firstOrNull;
@@ -31,8 +31,8 @@ class TimerEntryService {
         description: description,
         startTime: startTime,
         endTime: endTime,
-        project:
-            _projectService.getProject(projectId) ?? await onMissingProject(),
+        project: _projectService.getProject(projectId) ??
+            AppService.main.projectService.unkownProject,
       );
       _timerEntries.add(timerEntry);
     } else {

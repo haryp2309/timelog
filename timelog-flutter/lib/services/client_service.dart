@@ -4,6 +4,7 @@ import 'package:timelog/models/client.dart';
 class ClientService {
   final _clientListener = ListenerManager<List<Client>>();
   final List<Client> _clients = [];
+  final Client unkownClient = Client(id: "UNKOWN", name: "Unkown Client");
 
   Client addOrUpdateClient({required String clientId, required String name}) {
     final existingClient =

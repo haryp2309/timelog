@@ -54,7 +54,6 @@ class Api {
       clientId: clientId,
       color: HexColor.fromHex(body["color"]),
       name: body["name"],
-      onMissingClient: () => loadClient(app: app, clientId: clientId),
     );
   }
 
@@ -71,18 +70,15 @@ class Api {
       queryParams: queryParams,
     );
     final List<dynamic> body = jsonDecode(value.body);
-    final timerEntriesFutures = body.map((obj) {
+    final timerEntries = body.map((obj) {
       return app.timerEntryService.addOrUpdateTimerEntry(
         timerEntryId: obj["id"],
         projectId: obj["project"]["id"],
         startTime: DateTime.parse(obj["startTime"]),
         endTime: obj["endTime"] != null ? DateTime.parse(obj["endTime"]) : null,
         description: obj["description"],
-        onMissingProject: () async =>
-            loadProject(app: app, projectId: obj["project"]["id"]),
       );
     }).toList();
-    final timerEntries = await Future.wait(timerEntriesFutures);
     return timerEntries;
   }
 }
